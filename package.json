@@ -1,0 +1,23 @@
+{
+  "name": "crud_innovations",
+  "version": "1.0.0",
+  "description": "PHP CRUD Tutorial in 4 Phasen",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reinhardherrmann/crud_innovations.git"
+  },
+  "author": "Reinhard Herrmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reinhardherrmann/crud_innovations/issues"
+  },
+  "homepage": "https://github.com/reinhardherrmann/crud_innovations#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "font-awesome": "^4.7.0"
+  }
+}
