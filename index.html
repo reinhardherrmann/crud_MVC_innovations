@@ -5,11 +5,83 @@
     <title>Title</title>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
-    <script src="node_modules/dist/js/bootstrap.bundle.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </head>
-<body>
-
-
+<body class="bg-primary">
+    <div class="container-fluid w75">
+    <div class="jumbotron">
+        <div class="card mt-5">
+            <div class="card-header text-light bg-info">
+                <h4>PHP-CRUD</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-5">
+                            <input class="form-control" type="text" name="first_name" placeholder="Vorname">
+                        </div>
+                        <div class="col-5">
+                            <input class="form-control" type="text" name="last_name" placeholder="Nachname">
+                        </div>
+                        <div class="col-2 overflow-hidden">
+                            <button class="btn btn-primary" type="submit" name="button">Save</button>
+                        </div>
+                        <input type="hidden" name="ID" value="<?=$ID?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Info-Feld -->
+        <h5 class="text-white">INFO</h5>
+        <div class="card mt-1">
+            <div class="card-header">
+                <form method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="search" placeholder="search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-info" type="submit" name="button" value="search">
+                                <i class="fa fa-search text-white"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead class="bg-secondary text-light">
+                    <tr>
+                        <th scope="col">first_name</th>
+                        <th scope="col">last_name</th>
+                        <th scope="col" class="d-flex justify-content-end pe-3">action</th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td>Heinz</td>
+                        <td>Müller</td>
+                        <td class="d-flex justify-content-end">
+                            <form method="post">
+                                <input type="hidden" name="ID" value="<?=$row['ID']?>">
+                                <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
+                                <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Heidi</td>
+                        <td>Schmidt</td>
+                        <td class="d-flex justify-content-end">
+                            <form method="post">
+                                <input type="hidden" name="ID" value="<?=$row['ID']?>">
+                                <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
+                                <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>.
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>
