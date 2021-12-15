@@ -9,10 +9,9 @@ try {
     exit("keine Verbindung zur Datenbank");
 }
 
+// Variablen initialisieren
 $param = [];    // leeres array als SQL-Parameter erzeugen, wird ggf. mit Werten gefüllt
 $list_sql = "SELECT * FROM tbl_user ORDER BY usr_last_name ASC";
-
-// Variablen initialisieren
 $info ="";
 $action="none";
 
@@ -21,7 +20,12 @@ if (isset($_POST['button'])){
     $action = $_POST['button'];
     switch ($action){
         case 'save':
-            $info="save";
+            $sql = "INSERT INTO tbl_user (usr_first_name, usr_last_name) VALUES(:first_name, :last_name);";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(['first_name' => $_POST['first_name'],
+                'last_name' => $_POST['last_name']]);
+            if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gespeichert!";
+            else $info="Keine Daten gespeichert";
             break;
         case 'edit':
             $info="edit";
