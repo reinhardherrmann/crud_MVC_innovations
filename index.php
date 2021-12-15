@@ -11,6 +11,36 @@ try {
 
 $param = [];    // leeres array als SQL-Parameter erzeugen, wird ggf. mit Werten gefüllt
 $list_sql = "SELECT * FROM tbl_user ORDER BY usr_last_name ASC";
+
+// Variablen initialisieren
+$info ="";
+$action="none";
+
+// auf Click eines beliebigen Buttons reagieren
+if (isset($_POST['button'])){
+    $action = $_POST['button'];
+    switch ($action){
+        case 'save':
+            $info="save";
+            break;
+        case 'edit':
+            $info="edit";
+            break;
+        case 'update':
+            $info="update";
+            break;
+        case 'delete':
+            $info="delete";
+            break;
+        case 'search':
+            $info="search";
+            break;
+    }
+}
+
+
+
+
 $stmt = $conn->prepare($list_sql);
 $stmt->execute($param);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -35,8 +65,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="card-header text-light bg-info">
                 <h4>PHP-CRUD</h4>
             </div>
-            <!-- Formular zur Eingabe/Aktualisierung der Werte -->
             <div class="card-body">
+                <!-- Formular zur Eingabe/Aktualisierung der Werte -->
                 <form method="post">
                     <div class="row">
                         <div class="col-5">
@@ -54,7 +84,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
         <!-- Info-Feld -->
-        <h5 class="text-white">INFO</h5>
+        <h5 class="text-white"><?=$info?></h5>
         <div class="card mt-1">
             <div class="card-header">
                 <!-- Suchformular -->
