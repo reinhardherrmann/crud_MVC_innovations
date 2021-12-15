@@ -1,55 +1,78 @@
 <?php
-try {
-    $user="root";
-    $pwd="";
-    $conn = new PDO("mysql:host=127.0.0.1; dbname=mydb", $user,$pwd);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}catch(PDOException $e){
-    echo $e->getMessage();
-    exit("keine Verbindung zur Datenbank");
-}
+global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_sql;
 
-// Variablen initialisieren
-$param = [];    // leeres array als SQL-Parameter erzeugen, wird ggf. mit Werten gefüllt
-$list_sql = "SELECT * FROM tbl_user ORDER BY usr_last_name ASC";
-$info ="";
-$action="none";
+//TODO Initialisierung der Variablen in Funktion reset_vars umsetzen
 
-// auf Click eines beliebigen Buttons reagieren
-if (isset($_POST['button'])){
-    $action = $_POST['button'];
-    switch ($action){
-        case 'save':
-            $sql = "INSERT INTO tbl_user (usr_first_name, usr_last_name) VALUES(:first_name, :last_name);";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(['first_name' => $_POST['first_name'],
-                'last_name' => $_POST['last_name']]);
-            if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gespeichert!";
-            else $info="Keine Daten gespeichert";
-            break;
-        case 'edit':
-            $info="edit";
-            break;
-        case 'update':
-            $info="update";
-            break;
-        case 'delete':
-            $info="delete";
-            break;
-        case 'search':
-            $info="search";
-            break;
+
+    // Verbindung mit Datenbank herstellen
+    try {
+        $user="root";
+        $pwd="";
+        $conn = new PDO("mysql:host=127.0.0.1; dbname=mydb", $user,$pwd);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }catch(PDOException $e){
+        echo $e->getMessage();
+        exit("keine Verbindung zur Datenbank");
     }
-}
+
+    // Variablen initialisieren
+    // reset_vars();
+    $first_name=null;
+    $last_name=null;
+    $ID=null;
+    $list_sql = "SELECT * FROM tbl_user ORDER BY usr_last_name ASC";
+    $param=[];
+    $info="";
+    $save_update="save";
+    $action="none";
+
+
+    // auf Click eines beliebigen Buttons reagieren
+    if (isset($_POST['button'])){
+        $action = $_POST['button'];
+        switch ($action){
+            case 'save':
+                //$save_update="save";
+                $sql = "INSERT INTO tbl_user (usr_first_name, usr_last_name) VALUES(:first_name, :last_name);";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(['first_name' => $_POST['first_name'],
+                    'last_name' => $_POST['last_name']]);
+                if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gespeichert!";
+                else $info="Keine Daten gespeichert";
+                break;
+            case 'edit':
+                $save_update="update";
+                $sql = "SELECT * FROM tbl_user WHERE ID =:id;";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(['id'=>$_POST['ID']]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $first_name = $row['usr_first_name'];
+                $last_name = $row['usr_last_name'];
+                $ID = $row['ID'];
+
+                //if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gespeichert!";
+                //else $info="Keine Daten gespeichert";
+                break;
+            case 'update':
+                $info="update";
+                break;
+            case 'delete':
+                $info="delete";
+                break;
+            case 'search':
+                $info="search";
+                break;
+        }
+    }
 
 
 
 
-$stmt = $conn->prepare($list_sql);
-$stmt->execute($param);
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// Daten testweise ohne Formatierung ausgeben
-// echo '<pre>', var_dump($rows), '</pre>';
+    $stmt = $conn->prepare($list_sql);
+    $stmt->execute($param);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Daten testweise ohne Formatierung ausgeben
+    // echo '<pre>', var_dump($rows), '</pre>';
 ?>
 
 
@@ -74,15 +97,15 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <form method="post">
                     <div class="row">
                         <div class="col-5">
-                            <input class="form-control" type="text" name="first_name" placeholder="Vorname">
+                            <input class="form-control" type="text" name="first_name" placeholder="Vorname" value="<?=$first_name?>">
                         </div>
                         <div class="col-5">
-                            <input class="form-control" type="text" name="last_name" placeholder="Nachname">
+                            <input class="form-control" type="text" name="last_name" placeholder="Nachname" value="<?=$last_name?>">
                         </div>
                         <div class="col-2 overflow-hidden">
-                            <button class="btn btn-primary" type="submit" value="save" name="button">Save</button>
+                            <button class="btn btn-primary" type="submit" value=<?=$save_update?> name="button"><?=$save_update?></button>
                         </div>
-                        <input type="hidden" name="ID" value="999">
+                        <input type="text" name="ID" value="<?=$ID?>">
                     </div>
                 </form>
             </div>
@@ -118,7 +141,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?=htmlspecialchars($row['usr_last_name'])?></td>
                         <td class="d-flex justify-content-end">
                             <form method="post">
-                                <input type="hidden" name="ID" value="<?=htmlspecialchars($row['ID']) ?>">
+                                <input type="text" name="ID" value="<?=htmlspecialchars($row['ID']) ?>">
                                 <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
                                 <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
                             </form>
