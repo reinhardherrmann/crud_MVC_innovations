@@ -1,3 +1,24 @@
+<?php
+try {
+    $user="root";
+    $pwd="";
+    $conn = new PDO("mysql:host=127.0.0.1; dbname=mydb", $user,$pwd);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}catch(PDOException $e){
+    echo $e->getMessage();
+    exit("keine Verbindung zur Datenbank");
+}
+
+$param = [];    // leeres array als SQL-Parameter erzeugen, wird ggf. mit Werten gefüllt
+$list_sql = "SELECT * FROM tbl_user ORDER BY usr_last_name ASC";
+$stmt = $conn->prepare($list_sql);
+$stmt->execute($param);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Daten testweise ohne Formatierung ausgeben
+// echo '<pre>', var_dump($rows), '</pre>';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +35,7 @@
             <div class="card-header text-light bg-info">
                 <h4>PHP-CRUD</h4>
             </div>
+            <!-- Formular zur Eingabe/Aktualisierung der Werte -->
             <div class="card-body">
                 <form method="post">
                     <div class="row">
@@ -24,9 +46,9 @@
                             <input class="form-control" type="text" name="last_name" placeholder="Nachname">
                         </div>
                         <div class="col-2 overflow-hidden">
-                            <button class="btn btn-primary" type="submit" name="button">Save</button>
+                            <button class="btn btn-primary" type="submit" value="save" name="button">Save</button>
                         </div>
-                        <input type="hidden" name="ID" value="<?=$ID?>">
+                        <input type="hidden" name="ID" value="999">
                     </div>
                 </form>
             </div>
@@ -35,6 +57,7 @@
         <h5 class="text-white">INFO</h5>
         <div class="card mt-1">
             <div class="card-header">
+                <!-- Suchformular -->
                 <form method="post">
                     <div class="input-group">
                         <input type="text" class="form-control" name="search" placeholder="search">
@@ -55,28 +78,19 @@
                         <th scope="col" class="d-flex justify-content-end pe-3">action</th>
                     </tr>
                     </thead>
+                    <?php foreach ($rows as $row): ?>
                     <tr>
-                        <td>Heinz</td>
-                        <td>Müller</td>
+                        <td><?=htmlspecialchars($row['usr_first_name'])?></td>
+                        <td><?=htmlspecialchars($row['usr_last_name'])?></td>
                         <td class="d-flex justify-content-end">
                             <form method="post">
-                                <input type="hidden" name="ID" value="<?=$row['ID']?>">
+                                <input type="hidden" name="ID" value="<?=htmlspecialchars($row['ID']) ?>">
                                 <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
                                 <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
                             </form>
                         </td>
                     </tr>
-                    <tr>
-                        <td>Heidi</td>
-                        <td>Schmidt</td>
-                        <td class="d-flex justify-content-end">
-                            <form method="post">
-                                <input type="hidden" name="ID" value="<?=$row['ID']?>">
-                                <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
-                                <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                    <?php endforeach;?>
                 </table>.
             </div>
         </div>
