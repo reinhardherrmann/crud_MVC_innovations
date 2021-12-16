@@ -60,7 +60,11 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                 else $info="Kein Datensatz wurde geändert!";
                 break;
             case 'delete':
-
+                $sql = "DELETE FROM tbl_user WHERE ID = :id";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(['id'=>$_POST['ID']]);
+                if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gelöscht!";
+                else $info="Kein Datensatz wurde gelöscht!";
                 break;
             case 'search':
 
