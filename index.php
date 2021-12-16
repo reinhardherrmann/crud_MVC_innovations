@@ -49,22 +49,24 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                 $first_name = $row['usr_first_name'];
                 $last_name = $row['usr_last_name'];
                 $ID = $row['ID'];
-
-                //if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz gespeichert!";
-                //else $info="Keine Daten gespeichert";
                 break;
             case 'update':
-                $info="update";
+                $sql = "UPDATE tbl_user SET usr_first_name=:first_name, usr_last_name=:last_name WHERE ID=:id";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(['first_name'=> $_POST['first_name'],
+                    'last_name'=>$_POST['last_name'],'id'=>$_POST['ID']]);
+                $save_update="save";
+                if($stmt->rowCount()>0) $info= $stmt->rowCount() . " Datensatz geändert!";
+                else $info="Kein Datensatz wurde geändert!";
                 break;
             case 'delete':
-                $info="delete";
+
                 break;
             case 'search':
-                $info="search";
+
                 break;
         }
     }
-
 
 
 
@@ -105,7 +107,7 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                         <div class="col-2 overflow-hidden">
                             <button class="btn btn-primary" type="submit" value=<?=$save_update?> name="button"><?=$save_update?></button>
                         </div>
-                        <input type="text" name="ID" value="<?=$ID?>">
+                        <input type="hidden" name="ID" value="<?=$ID?>">
                     </div>
                 </form>
             </div>
@@ -141,7 +143,7 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                         <td><?=htmlspecialchars($row['usr_last_name'])?></td>
                         <td class="d-flex justify-content-end">
                             <form method="post">
-                                <input type="text" name="ID" value="<?=htmlspecialchars($row['ID']) ?>">
+                                <input type="hidden" name="ID" value="<?=htmlspecialchars($row['ID']) ?>">
                                 <button type="submit" class="btn btn-info text-white" value="edit" name="button">edit</button>
                                 <button type="submit" class="btn btn-danger text-white" value="delete" name="button">delete</button>
                             </form>
