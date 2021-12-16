@@ -67,7 +67,9 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                 else $info="Kein Datensatz wurde gelöscht!";
                 break;
             case 'search':
-
+                $list_sql = "SELECT * FROM tbl_user WHERE (usr_last_name like :search_string)
+                             OR (usr_first_name like :search_string)";
+                $param = ['search_string' => '%' . $_POST['search'] . '%'];
                 break;
         }
     }
