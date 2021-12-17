@@ -95,7 +95,7 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
 </head>
 <body class="bg-primary">
     <div class="container-fluid w75">
-    <div class="jumbotron">
+        <div class="jumbotron">
         <div class="card mt-5">
             <div class="card-header text-light bg-info">
                 <h4>PHP-CRUD</h4>
@@ -144,7 +144,7 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
                     </tr>
                     </thead>
                     <?php foreach ($rows as $row): ?>
-                    <tr>
+                    <tr class="t-row">
                         <td><?=htmlspecialchars($row['usr_first_name'])?></td>
                         <td><?=htmlspecialchars($row['usr_last_name'])?></td>
                         <td class="d-flex justify-content-end">
@@ -160,8 +160,8 @@ global $first_name, $last_name, $ID, $save_update, $info, $action, $param,$list_
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-
+    <script src="script.js"></script>
 </body>
 </html>
