@@ -2,7 +2,7 @@
   "name": "crud_innovations",
   "version": "1.0.0",
   "description": "PHP CRUD Tutorial in 4 Phasen",
-  "main": "index.php",
+  "main": "index_functional.php",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
